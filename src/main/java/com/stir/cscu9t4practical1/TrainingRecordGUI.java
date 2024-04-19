@@ -26,7 +26,12 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
     private JLabel labs = new JLabel(" Secs:");
     private JLabel labdist = new JLabel(" Distance (km):");
     private JButton addR = new JButton("Add");
+    private JButton removeR = new JButton("Remove");
     private JButton lookUpByDate = new JButton("Look Up");
+    private JButton findAllByDate = new JButton("Find All");
+    private JComboBox<String> entryTypeComboBox;
+    private String[] entryTypes = {"Run", "Cycle", "Swim"};
+
 
     private TrainingRecord myAthletes = new TrainingRecord();
 
@@ -39,7 +44,17 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
     // set up the GUI 
     public TrainingRecordGUI() {
         super("Training Record");
+        
         setLayout(new FlowLayout());
+        
+        JPanel topPanel = new JPanel();
+        JLabel entryTypeLabel = new JLabel("Entry Type:");
+        topPanel.add(entryTypeLabel);
+        entryTypeComboBox = new JComboBox<>(entryTypes);
+        topPanel.add(entryTypeComboBox);
+        add(topPanel);
+    
+        
         add(labn);
         add(name);
         name.setEditable(true);
@@ -66,33 +81,45 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
         dist.setEditable(true);
         add(addR);
         addR.addActionListener(this);
+        add(removeR);
+        removeR.addActionListener(this);
         add(lookUpByDate);
         lookUpByDate.addActionListener(this);
+        add(findAllByDate);
+        findAllByDate.addActionListener(this);
         add(outputArea);
         outputArea.setEditable(false);
         setSize(720, 200);
         setVisible(true);
         blankDisplay();
-
+        
         // To save typing in new entries while testing, uncomment
         // the following lines (or add your own test cases)
-        
+      
     } // constructor
 
     // listen for and respond to GUI events 
     public void actionPerformed(ActionEvent event) {
         String message = "";
+        String selectedEntryType = (String) entryTypeComboBox.getSelectedItem();
+        
         if (event.getSource() == addR) {
-            message = addEntry("generic");
+            message = addEntry(selectedEntryType);
+        }
+        if (event.getSource() == removeR) {
+        	message = removeEntry(); 
         }
         if (event.getSource() == lookUpByDate) {
             message = lookupEntry();
+        }
+        if (event.getSource() == findAllByDate) {
+        	message = lookupEntries();
         }
         outputArea.setText(message);
         blankDisplay();
     } // actionPerformed
 
-    public String addEntry(String what) {
+	public String addEntry(String what) {
         String message = "Record added\n";
         System.out.println("Adding "+what+" entry to the records");
         String n = name.getText();
@@ -108,12 +135,36 @@ public class TrainingRecordGUI extends JFrame implements ActionListener {
         return message;
     }
     
+	 private String removeEntry() {
+	        String message = "Record Removed\n";
+	        String n = name.getText();
+	        int m = Integer.parseInt(month.getText());
+	        int d = Integer.parseInt(day.getText());
+	        int y = Integer.parseInt(year.getText());
+	        float km = java.lang.Float.parseFloat(dist.getText());
+	        int h = Integer.parseInt(hours.getText());
+	        int mm = Integer.parseInt(mins.getText());
+	        int s = Integer.parseInt(secs.getText());
+	        Entry e = new Entry(n, d, m, y, h, mm, s, km);
+	        myAthletes.removeEntry(e);
+	        return message;
+	    }
+	 
     public String lookupEntry() {
         int m = Integer.parseInt(month.getText());
         int d = Integer.parseInt(day.getText());
         int y = Integer.parseInt(year.getText());
         outputArea.setText("looking up record ...");
         String message = myAthletes.lookupEntry(d, m, y);
+        return message;
+    }
+    
+    public String lookupEntries() {
+		int m = Integer.parseInt(month.getText());
+        int d = Integer.parseInt(day.getText());
+        int y = Integer.parseInt(year.getText());
+        outputArea.setText("looking up all records ...");
+        String message = myAthletes.lookupEntries(d, m, y);
         return message;
     }
 

@@ -5,7 +5,7 @@ import java.util.Calendar;
 public class Entry {
   private String name;
   private Calendar dateAndTime;
-  private float distance;
+  protected float distance;
   
   public Entry (String n, int d, int m, int y, int h, int min, int s, float dist) {
     name = n;
@@ -46,7 +46,7 @@ public class Entry {
 
   public float getDistance () {
     return distance;
-  } //getYear
+  } //getDistance
 
   public String getEntry () {
    String result = getName()+" ran " + getDistance() + " km in "
@@ -54,5 +54,23 @@ public class Entry {
              +getDay()+"/"+getMonth()+"/"+getYear()+"\n";
    return result;
   } //getEntry
+
+public String getTerrain() {
+	return null;
+}
+public String getTempo() {
+	return null; 
+}
+
+public int getRepetitions() {
+	return 0;
+}
+public int getRecovery() {
+	return 0;
+}
+
+public String getWhere() {
+	return null;
+}
    
 } // Entry

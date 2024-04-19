@@ -145,8 +145,8 @@ public class SwimEntryTest {
         
         Entry instanceB = new SwimEntry("Alice", 1, 2, 2003, 0, 16, 7, 3,"pool");
         String expResultB = "in a pool";
-        String result = instanceB.getWhere();
-        assertEquals(expResultB, result);
+        String result1 = instanceB.getWhere();
+        assertEquals(expResultB, result1);
     }
     /**
      * Test of getEntry method, of class SwimEntry.
